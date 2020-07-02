@@ -63,15 +63,26 @@ if [ -d "$statefun_version" ]; then
 fi
 
 echo -n >&2 "Generating Dockerfiles..."
-dir="$statefun_version"
-mkdir "$dir"
+scala_2_12_dir="$statefun_version"
+mkdir "$scala_2_12_dir"
 
-cp -r template/* "$dir"
+cp -r template/* "$scala_2_12_dir"
 
 sed \
     -e "s/%%STATEFUN_VERSION%%/$statefun_version/" \
     -e "s/%%FLINK_VERSION%%/$flink_version/" \
     -e "s/%%GPG_KEY%%/$gpg_key/" \
-    "template/Dockerfile" > "$dir/Dockerfile"
+    "template/Dockerfile" > "$scala_2_12_dir/Dockerfile"
+
+scala_2_11_dir="$statefun_version-scala_2.11"
+mkdir "$scala_2_11_dir"
+
+cp -r template/* "$scala_2_11_dir"
+
+sed \
+    -e "s/%%STATEFUN_VERSION%%/$statefun_version/" \
+    -e "s/%%FLINK_VERSION%%/$flink_version-scala_2.11/" \
+    -e "s/%%GPG_KEY%%/$gpg_key/" \
+    "template/Dockerfile" > "$scala_2_11_dir/Dockerfile"
 
 echo >&2 " done."
