@@ -58,20 +58,25 @@ if [ -z "$gpg_key" ]; then
     error "Missing GPG key ID in gpg_keys.txt file for release $statefun_version"
 fi
 
-if [ -d "$statefun_version" ]; then
-    error "Directory $statefun_version already exists; delete before continuing"
-fi
+function generate_dockerfile() {
+    local java_version="$1"
+    local dir="$statefun_version-java$java_version"
 
-echo -n >&2 "Generating Dockerfiles..."
-dir="$statefun_version"
-mkdir "$dir"
+    echo -n >&2 "Generating Dockerfiles for StateFun version=$statefun_version, Flink version=$flink_version, Java version=$java_version ..."
+    rm -rf $dir
+    mkdir "$dir"
 
-cp -r template/* "$dir"
+    cp -r template/* "$dir"
 
-sed \
-    -e "s/%%STATEFUN_VERSION%%/$statefun_version/" \
-    -e "s/%%FLINK_VERSION%%/$flink_version/" \
-    -e "s/%%GPG_KEY%%/$gpg_key/" \
-    "template/Dockerfile" > "$dir/Dockerfile"
+    sed \
+        -e "s/%%STATEFUN_VERSION%%/$statefun_version/" \
+        -e "s/%%FLINK_VERSION%%/$flink_version/" \
+        -e "s/%%JAVA_VERSION%%/$java_version/" \
+        -e "s/%%GPG_KEY%%/$gpg_key/" \
+        "template/Dockerfile" > "$dir/Dockerfile"
 
-echo >&2 " done."
+    echo >&2 " done."
+}
+
+generate_dockerfile 8
+generate_dockerfile 11

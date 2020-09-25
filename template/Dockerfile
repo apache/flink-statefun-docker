@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM flink:%%FLINK_VERSION%%
+FROM flink:%%FLINK_VERSION%%-scala_2.12-java%%JAVA_VERSION%%
 
 ENV STATEFUN_VERSION=%%STATEFUN_VERSION%% \
     GPG_KEY=%%GPG_KEY%%
