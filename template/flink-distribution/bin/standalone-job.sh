@@ -24,8 +24,8 @@ USAGE="Usage: standalone-job.sh ((start|start-foreground))|stop [args]"
 STARTSTOP=$1
 ENTRY_POINT_NAME="statefun"
 
-if [[ ${STARTSTOP} != "start" ]] && [[ ${STARTSTOP} != "start-foreground" ]] && [[ ${STARTSTOP} != "stop" ]]; then
-  echo ${USAGE}
+if [[ $STARTSTOP != "start" ]] && [[ $STARTSTOP != "start-foreground" ]] && [[ $STARTSTOP != "stop" ]]; then
+  echo $USAGE
   exit 1
 fi
 
@@ -37,25 +37,10 @@ bin=`cd "$bin"; pwd`
 # Startup parameters
 ARGS=("--configDir" "${FLINK_CONF_DIR}" "${@:2}")
 
-if [[ ${STARTSTOP} == "start" ]] || [[ ${STARTSTOP} == "start-foreground" ]]; then
-    if [ ! -z "${FLINK_JM_HEAP_MB}" ] && [ "${FLINK_JM_HEAP}" == 0 ]; then
-	    echo "used deprecated key \`${KEY_JOBM_MEM_MB}\`, please replace with key \`${KEY_JOBM_MEM_SIZE}\`"
-    else
-	    flink_jm_heap_bytes=$(parseBytes ${FLINK_JM_HEAP})
-	    FLINK_JM_HEAP_MB=$(getMebiBytes ${flink_jm_heap_bytes})
-    fi
-
-    if [[ ! ${FLINK_JM_HEAP_MB} =~ $IS_NUMBER ]] || [[ "${FLINK_JM_HEAP_MB}" -lt "0" ]]; then
-        echo "[ERROR] Configured memory size is not a valid value. Please set '${KEY_JOBM_MEM_SIZE}' in ${FLINK_CONF_FILE}."
-        exit 1
-    fi
-
-    if [ "${FLINK_JM_HEAP_MB}" -gt "0" ]; then
-        export JVM_ARGS="$JVM_ARGS -Xms"$FLINK_JM_HEAP_MB"m -Xmx"$FLINK_JM_HEAP_MB"m"
-    fi
-
+if [[ $STARTSTOP == "start" ]] || [[ $STARTSTOP == "start-foreground" ]]; then
     # Add cluster entry point specific JVM options
     export FLINK_ENV_JAVA_OPTS="${FLINK_ENV_JAVA_OPTS} ${FLINK_ENV_JAVA_OPTS_JM}"
+    parseJmJvmArgsAndExportLogs "${ARGS[@]}"
 fi
 
 if [[ $STARTSTOP == "start-foreground" ]]; then
