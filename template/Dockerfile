@@ -74,6 +74,10 @@ RUN mkdir -p $FLINK_HOME/plugins/oss-fs-hadoop && \
 RUN mkdir -p $FLINK_HOME/plugins/azure-fs-hadoop && \
     mv $FLINK_HOME/opt/flink-azure-fs-hadoop-%%FLINK_VERSION%%.jar $FLINK_HOME/plugins/azure-fs-hadoop
 
+
+# add tcnative
+RUN mv $FLINK_HOME/opt/flink-shaded-netty-tcnative-dynamic-*.jar  $FLINK_HOME/lib/
+
 # entry point 
 ADD docker-entry-point.sh /docker-entry-point.sh
 
