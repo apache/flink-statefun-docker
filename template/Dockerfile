@@ -79,4 +79,7 @@ RUN mkdir -p $FLINK_HOME/plugins/azure-fs-hadoop && \
 # entry point 
 ADD docker-entry-point.sh /docker-entry-point.sh
 
+# add tcnative
+RUN mv $FLINK_HOME/opt/flink-shaded-netty-tcnative-dynamic-*.jar  $FLINK_HOME/lib/
+
 ENTRYPOINT ["/docker-entry-point.sh"]
