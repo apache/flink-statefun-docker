@@ -69,8 +69,6 @@ RUN mkdir -p $STATEFUN_MODULES && \
 # add filesystem plugins
 RUN mkdir -p $FLINK_HOME/plugins/s3-fs-presto && \
     mv $FLINK_HOME/opt/flink-s3-fs-presto-%%FLINK_VERSION%%.jar $FLINK_HOME/plugins/s3-fs-presto
-RUN mkdir -p $FLINK_HOME/plugins/swift-fs-hadoop && \
-    mv $FLINK_HOME/opt/flink-swift-fs-hadoop-%%FLINK_VERSION%%.jar $FLINK_HOME/plugins/swift-fs-hadoop
 RUN mkdir -p $FLINK_HOME/plugins/oss-fs-hadoop && \
     mv $FLINK_HOME/opt/flink-oss-fs-hadoop-%%FLINK_VERSION%%.jar $FLINK_HOME/plugins/oss-fs-hadoop
 RUN mkdir -p $FLINK_HOME/plugins/azure-fs-hadoop && \
