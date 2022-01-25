@@ -52,7 +52,7 @@ if [ -z "$statefun_version" ] || [ -z "$flink_version" ]; then
     exit 1
 fi
 
-gpg_key=`grep "$statefun_version" gpg_keys.txt | cut -d '=' -f2`
+gpg_key=`grep -F "$statefun_version" gpg_keys.txt | cut -d '=' -f2`
 
 if [ -z "$gpg_key" ]; then
     error "Missing GPG key ID in gpg_keys.txt file for release $statefun_version"
